@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-noche text-rosa/90 font-serif antialiased;
+    /* Gradiente de fondo fijo: noche -> violeta */
+    background-image: linear-gradient(160deg, #0b0616 0%, #1a0b2e 55%, #0b0616 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Foco visible y consistente en todo lo interactivo (accesibilidad) */
+  :focus-visible {
+    outline: 2px solid #f5c86a;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Nada de bloquear el scroll vertical: si un texto largo hace que la carta
+     mida más que la pantalla, tiene que poder bajarse para alcanzar los
+     botones. El orden del recorrido ya lo controla App.jsx montando una fase
+     por vez. */
+}
+
+@layer components {
+  /* Título cursivo con glow dorado */
+  .titulo-magico {
+    @apply font-cursiva text-oro;
+    text-shadow: 0 0 12px rgba(245, 200, 106, 0.45), 0 0 32px rgba(245, 200, 106, 0.22);
+  }
+
+  /* Botón base de la experiencia */
+  .boton-magico {
+    @apply font-ui text-sm tracking-wide rounded-full px-6 py-3
+           border border-oro/40 text-oro bg-oro/5
+           transition-all duration-300 ease-suave
+           hover:bg-oro/15 hover:border-oro/70 hover:shadow-glow
+           active:scale-95;
+  }
+
+  /* Superficie tipo pergamino translúcido */
+  .pergamino {
+    background: linear-gradient(145deg, rgba(246, 236, 217, 0.95), rgba(240, 225, 200, 0.88));
+    box-shadow:
+      0 10px 40px rgba(0, 0, 0, 0.5),
+      inset 0 0 60px rgba(180, 150, 100, 0.12);
+  }
+}
+
+/* Barra de scroll discreta */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 200, 106, 0.25);
+  border-radius: 999px;
+}
+
+/* ---------------------------------------------------------------------------
+   prefers-reduced-motion: si el sistema pide menos movimiento, las animaciones
+   CSS se apagan. Las de JS (framer-motion, partículas, confetti) se controlan
+   desde el hook usePrefersReducedMotion.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

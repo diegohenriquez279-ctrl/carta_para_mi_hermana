@@ -1,0 +1,9 @@
+Poné acá tu cancion con el nombre exacto: bg.mp3
+
+Recomendaciones:
+- Formato mp3, menos de 4 MB (idealmente 2-3 minutos).
+- Que sea instrumental o suave: va a sonar de fondo mientras ella lee.
+- Ojo con los derechos de autor si vas a compartir el link publicamente.
+
+Mientras no exista bg.mp3, el boton de musica se muestra apagado y deshabilitado.
+Este archivo .txt se puede borrar.
