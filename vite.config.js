@@ -2,17 +2,23 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // ---------------------------------------------------------------------------
-// TODO (Diego): cambiá 'carta-virtual-cumpleanos' por el nombre EXACTO de tu
-// repo en GitHub. Si el repo se llama "carta-hermana", acá va '/carta-hermana/'.
-// Las barras del inicio y del final son obligatorias.
-// Si en vez de GitHub Pages publicás en Netlify/Vercel, poné base: '/'.
+// BASE URL — de dónde cuelga el sitio.
+//
+// Ahora mismo está configurado para **Netlify o Vercel**, que sirven el sitio
+// desde la raíz del dominio. Por eso base es '/' y no hay nada que tocar.
+//
+// Si algún día te pasás a GitHub Pages, ahí el sitio NO vive en la raíz sino en
+// tuusuario.github.io/NOMBRE-REPO/, y tenés que cambiarlo así:
+//
+//     const NOMBRE_REPO = 'carta-virtual-cumpleanos';   // el nombre exacto del repo
+//     base: process.env.NODE_ENV === 'production' ? `/${NOMBRE_REPO}/` : '/',
+//
+// Si no coincide con el nombre real del repo, la página sale en blanco.
 // ---------------------------------------------------------------------------
-const NOMBRE_REPO = 'carta-virtual-cumpleanos';
 
 export default defineConfig({
   plugins: [react()],
-  // En dev siempre '/', en build el subdirectorio de GitHub Pages.
-  base: process.env.NODE_ENV === 'production' ? `/${NOMBRE_REPO}/` : '/',
+  base: '/',
 
   build: {
     rollupOptions: {

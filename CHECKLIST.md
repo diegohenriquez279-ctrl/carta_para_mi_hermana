@@ -88,13 +88,14 @@ Si no querés música, dejalo así: no molesta.
 
 ## 4. Antes de publicar
 
-- [ ] Crear el repo en GitHub y anotar el nombre exacto
-- [ ] Poner ese nombre en `vite.config.js` → `const NOMBRE_REPO = '…'`
-      (si está mal, la página sale en blanco)
-- [ ] `npm run build` y `npm run preview` para ver la versión final
-- [ ] `npm run deploy`
-- [ ] En GitHub: **Settings → Pages → rama `gh-pages`, carpeta `/ (root)`**
-- [ ] Abrir el link en **tu celular** y recorrer todo de punta a punta
+- [ ] Crear el repo **privado** `carta-virtual-cumpleanos` en GitHub
+- [ ] `git push -u origin main`
+- [ ] Conectar el repo en <https://app.netlify.com> (Add new site → Import an
+      existing project → GitHub). La configuración ya viene en `netlify.toml`.
+- [ ] Abrir el link que te da Netlify en **tu celular** y recorrer todo
+
+> El `base` de `vite.config.js` ya está en `/`, que es lo que corresponde para
+> Netlify y Vercel. Solo hay que cambiarlo si te pasás a GitHub Pages.
 
 ---
 

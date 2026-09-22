@@ -139,56 +139,48 @@ no se rompe.
 
 ---
 
-## Publicar en GitHub Pages
+## Publicar el sitio
 
-### 1. Poné el nombre de tu repo
+El repo es **privado**, así que las fotos no quedan expuestas en GitHub.
+El sitio se publica con Netlify (o Vercel), que sí puede construir repos
+privados gratis.
 
-Abrí `vite.config.js` y cambiá esta línea por el nombre **exacto** de tu repo en GitHub:
+Ya dejé la configuración lista: `netlify.toml` y `vercel.json` le dicen a cada
+plataforma cómo compilar el proyecto, así que no hay que configurar nada a mano.
 
-```js
-const NOMBRE_REPO = 'carta-virtual-cumpleanos';
-```
+### Con Netlify (recomendado)
 
-Si tu repo se llama `carta-hermana`, poné `'carta-hermana'`. De esto depende que
-las fotos y los estilos carguen: si está mal, vas a ver la página en blanco.
+1. Entrá a <https://app.netlify.com> e iniciá sesión con tu cuenta de GitHub.
+2. **Add new site → Import an existing project → GitHub**.
+3. Autorizá a Netlify y elegí el repo `carta-virtual-cumpleanos`.
+4. El comando de build y la carpeta ya vienen cargados desde `netlify.toml`
+   (`npm run build` y `dist`). Dale a **Deploy**.
+5. En un par de minutos te da un link tipo `algo-random.netlify.app`.
+   Podés cambiarle el nombre en **Site configuration → Change site name**.
 
-> ¿Por qué? Porque en GitHub Pages el sitio no vive en `tuusuario.github.io/`
-> sino en `tuusuario.github.io/NOMBRE-REPO/`. Vite necesita saberlo para armar
-> bien las rutas. En `npm run dev` siempre usa `/`, así que en local no se nota.
->
-> Si en vez de GitHub Pages usás Netlify o Vercel, cambiá el `base` a `'/'`.
+### Con Vercel
 
-### 2. Subí el proyecto a GitHub
+1. Entrá a <https://vercel.com/new> con tu cuenta de GitHub.
+2. Importá el repo `carta-virtual-cumpleanos`.
+3. Detecta Vite solo. Dale a **Deploy**.
 
-```bash
-git init
-```
-
-```bash
-git add . && git commit -m "Carta de cumpleaños"
-```
+### Cada vez que cambies algo
 
 ```bash
-git remote add origin https://github.com/TU-USUARIO/NOMBRE-REPO.git
+git add . && git commit -m "Cambio los textos"
 ```
 
 ```bash
-git branch -M main && git push -u origin main
+git push
 ```
 
-### 3. Publicá
+Netlify y Vercel reconstruyen el sitio solas con cada push. No hace falta
+`npm run deploy` (ese script es solo por si algún día te pasás a GitHub Pages).
 
-```bash
-npm run deploy
-```
-
-Eso corre el build y sube la carpeta `dist` a la rama `gh-pages`.
-
-### 4. Activá Pages
-
-En GitHub: **Settings → Pages → Source: Deploy from a branch → rama `gh-pages`, carpeta `/ (root)`.**
-
-En un par de minutos queda en `https://TU-USUARIO.github.io/NOMBRE-REPO/`.
+> **Sobre la privacidad:** el repo es privado, pero **el link del sitio es
+> público** — cualquiera que lo tenga puede abrirlo. No queda indexado en Google
+> ni es adivinable, pero si se lo pasás a alguien, esa persona puede pasárselo a
+> otra. Tenelo en cuenta antes de compartirlo en un grupo grande.
 
 ---
 
@@ -219,6 +211,8 @@ src/
     usePrefersReducedMotion.js
   lib/
     assets.js              Rutas de /public + helper @1x/@2x
+netlify.toml               Cómo compila Netlify (no hay que tocarlo)
+vercel.json                Cómo compila Vercel (no hay que tocarlo)
 public/
   media/
     photos/                Las fotos

@@ -1,0 +1,10 @@
+# Configuración para Netlify.
+# Con esto, Netlify sabe sola cómo compilar el proyecto: no hay que
+# configurar nada a mano en su panel.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
