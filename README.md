@@ -152,7 +152,7 @@ plataforma cómo compilar el proyecto, así que no hay que configurar nada a man
 
 1. Entrá a <https://app.netlify.com> e iniciá sesión con tu cuenta de GitHub.
 2. **Add new site → Import an existing project → GitHub**.
-3. Autorizá a Netlify y elegí el repo `carta-virtual-cumpleanos`.
+3. Autorizá a Netlify y elegí el repo `carta_para_mi_hermana`.
 4. El comando de build y la carpeta ya vienen cargados desde `netlify.toml`
    (`npm run build` y `dist`). Dale a **Deploy**.
 5. En un par de minutos te da un link tipo `algo-random.netlify.app`.
@@ -161,7 +161,7 @@ plataforma cómo compilar el proyecto, así que no hay que configurar nada a man
 ### Con Vercel
 
 1. Entrá a <https://vercel.com/new> con tu cuenta de GitHub.
-2. Importá el repo `carta-virtual-cumpleanos`.
+2. Importá el repo `carta_para_mi_hermana`.
 3. Detecta Vite solo. Dale a **Deploy**.
 
 ### Cada vez que cambies algo

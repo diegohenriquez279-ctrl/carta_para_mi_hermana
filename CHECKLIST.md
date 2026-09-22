@@ -88,7 +88,7 @@ Si no querés música, dejalo así: no molesta.
 
 ## 4. Antes de publicar
 
-- [ ] Crear el repo **privado** `carta-virtual-cumpleanos` en GitHub
+- [ ] Crear el repo **privado** `carta_para_mi_hermana` en GitHub
 - [ ] `git push -u origin main`
 - [ ] Conectar el repo en <https://app.netlify.com> (Add new site → Import an
       existing project → GitHub). La configuración ya viene en `netlify.toml`.

@@ -10,7 +10,7 @@ import react from '@vitejs/plugin-react';
 // Si algún día te pasás a GitHub Pages, ahí el sitio NO vive en la raíz sino en
 // tuusuario.github.io/NOMBRE-REPO/, y tenés que cambiarlo así:
 //
-//     const NOMBRE_REPO = 'carta-virtual-cumpleanos';   // el nombre exacto del repo
+//     const NOMBRE_REPO = 'carta_para_mi_hermana';   // el nombre exacto del repo
 //     base: process.env.NODE_ENV === 'production' ? `/${NOMBRE_REPO}/` : '/',
 //
 // Si no coincide con el nombre real del repo, la página sale en blanco.
