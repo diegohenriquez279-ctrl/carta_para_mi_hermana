@@ -6,3 +6,6 @@ dist
 
 # Fotos originales sin renombrar (respaldo local, no se sube al repo)
 _originales/
+
+# Respaldo de las fotos antes de comprimirlas (no se sube al repo)
+_originales-sin-comprimir/

@@ -9,18 +9,14 @@ import { photos as photosCrudas, stageLabels, stageOrder } from '../content/phot
 
 /**
  * Pequeño estallido de destellos que acompaña el cambio de etapa.
- * No usa tsparticles (sería caro montar otro motor): son 12 puntitos animados
- * con framer-motion, suficiente para el efecto y muy barato.
+ * Son 8 puntitos con framer-motion: barato y suficiente para el efecto.
  */
-function Destellos({ activo }) {
-  const movimientoReducido = usePrefersReducedMotion();
-  if (movimientoReducido || !activo) return null;
-
+function Destellos() {
   return (
     <span aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-visible">
-      {Array.from({ length: 12 }).map((_, i) => {
-        const angulo = (i / 12) * Math.PI * 2;
-        const distancia = 40 + (i % 3) * 22;
+      {Array.from({ length: 8 }).map((_, i) => {
+        const angulo = (i / 8) * Math.PI * 2;
+        const distancia = 46 + (i % 2) * 24;
         return (
           <motion.span
             key={i}
@@ -31,7 +27,7 @@ function Destellos({ activo }) {
               y: Math.sin(angulo) * distancia,
               scale: [0.4, 1, 0.3],
             }}
-            transition={{ duration: 1.1, delay: i * 0.03, ease: 'easeOut' }}
+            transition={{ duration: 1, delay: i * 0.04, ease: 'easeOut' }}
             className="absolute left-1/2 top-1/2 h-[3px] w-[3px] rounded-full bg-oro shadow-[0_0_8px_rgba(245,200,106,.9)]"
           />
         );
@@ -46,11 +42,20 @@ function Destellos({ activo }) {
  * - Agrupa las fotos por etapa automáticamente.
  * - Carousel horizontal (embla) con snap foto por foto.
  * - Barra de progreso con una marca por foto: tocarla salta a esa foto.
- * - Cuando cambia la etapa aparece su título con fade + destellos.
+ * - Al cambiar de etapa aparece su frase con fade + destellos.
  * - Click en una foto abre el Lightbox a pantalla completa.
  *
  * Acá no hay años ni fechas: el orden es el que tengan las fotos en
  * src/content/photos.js, tal cual están escritas.
+ *
+ * RENDIMIENTO — por qué el carousel está escrito así:
+ *  1. El atenuado de las fotas de los costados se hace con TRANSICIONES CSS,
+ *     no con framer-motion. Animar 16 tarjetas desde JavaScript en cada
+ *     deslizamiento hacía que se trabara en el celular; el navegador resuelve
+ *     las transiciones CSS solo, en el compositor.
+ *  2. El fondo borroso de la tarjeta solo se dibuja en la foto activa
+ *     (ver el comentario en PhotoCard.jsx).
+ *  3. Solo usamos opacidad y transform, que no obligan a recalcular el layout.
  */
 export default function Timeline() {
   const movimientoReducido = usePrefersReducedMotion();
@@ -60,7 +65,7 @@ export default function Timeline() {
   // Respetamos el orden del archivo: mover una foto ahí la mueve acá.
   const fotos = photosCrudas;
 
-  // Agrupación por etapa: [{ stage, label, desde, hasta, cantidad }]
+  // Agrupación por etapa: [{ stage, desde, hasta, cantidad }]
   const grupos = useMemo(() => {
     const acumulado = [];
     fotos.forEach((f, i) => {
@@ -71,7 +76,6 @@ export default function Timeline() {
       } else {
         acumulado.push({
           stage: f.stage,
-          label: stageLabels[f.stage] ?? f.stage,
           desde: i,
           hasta: i,
           cantidad: 1,
@@ -82,16 +86,13 @@ export default function Timeline() {
     return acumulado;
   }, [fotos]);
 
-  // Una marca por foto en la barra de progreso.
-  const marcas = useMemo(() => fotos.map((_, indice) => indice), [fotos]);
-
   // --- 2. Carousel --------------------------------------------------------
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'center',
-    containScroll: false, // false = la foto activa siempre queda centrada
+    containScroll: false, // la foto activa siempre queda centrada
     loop: false,
     skipSnaps: false,
-    duration: movimientoReducido ? 8 : 25, // velocidad del desplazamiento
+    duration: movimientoReducido ? 8 : 18, // más bajo = deslizamiento más ágil
   });
 
   const [seleccionado, setSeleccionado] = useState(0);
@@ -152,6 +153,7 @@ export default function Timeline() {
 
   // Porcentaje de avance de la barra de progreso.
   const avance = fotos.length > 1 ? (seleccionado / (fotos.length - 1)) * 100 : 100;
+  const posicionDe = (i) => (fotos.length > 1 ? (i / (fotos.length - 1)) * 100 : 50);
 
   return (
     <section ref={refSeccion} aria-label="Línea de tiempo de fotos" className="relative py-16">
@@ -168,84 +170,75 @@ export default function Timeline() {
         Deslizá para recorrerla
       </p>
 
-      {/* --- Título de la etapa actual: cambia con fade + destellos -------- */}
-      <div className="relative mb-6 flex h-16 items-center justify-center">
+      {/* --- Frase de la etapa actual: cambia con fade + destellos --------- */}
+      <div className="relative mb-6 flex min-h-[5.5rem] items-center justify-center px-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={etapaActual}
-            initial={{
-              opacity: 0,
-              y: movimientoReducido ? 0 : 14,
-              scale: movimientoReducido ? 1 : 0.94,
-            }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: movimientoReducido ? 0 : -14 }}
-            transition={{ duration: movimientoReducido ? 0.2 : 0.5, ease: [0.4, 0, 0.2, 1] }}
+            initial={{ opacity: 0, y: movimientoReducido ? 0 : 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: movimientoReducido ? 0 : -12 }}
+            transition={{ duration: movimientoReducido ? 0.2 : 0.45, ease: [0.4, 0, 0.2, 1] }}
             className="relative"
           >
-            {/* Destellos extra en el cambio de etapa */}
-            <Destellos activo />
-            <span className="titulo-magico text-4xl sm:text-5xl">
+            {!movimientoReducido && <Destellos />}
+            <span className="titulo-magico block text-center text-3xl leading-tight sm:text-5xl">
               {stageLabels[etapaActual] ?? etapaActual}
             </span>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* --- Barra de progreso con una marca por foto --------------------- */}
+      {/* --- Barra de progreso -------------------------------------------- */}
       <div className="mx-auto mb-8 w-full max-w-3xl px-6">
-        {/* Etiquetas de etapa, repartidas según cuántas fotos tiene cada una */}
-        <div className="mb-2 flex" aria-hidden="true">
-          {grupos.map((g, i) => (
-            <span
-              key={g.stage + '-' + i}
-              style={{ width: `${(g.cantidad / fotos.length) * 100}%` }}
-              className={`truncate text-center font-ui text-[0.6rem] uppercase tracking-[0.18em] transition-colors duration-300 ${
-                g.stage === etapaActual ? 'text-oro' : 'text-oro/30'
-              }`}
-            >
-              {g.label}
-            </span>
-          ))}
-        </div>
-
-        {/* Riel + relleno + marcas */}
-        <div className="relative h-7" role="group" aria-label="Saltar a una foto de la línea de tiempo">
+        <div
+          className="relative h-7"
+          role="group"
+          aria-label="Saltar a una foto de la línea de tiempo"
+        >
           {/* Riel */}
           <span
             aria-hidden="true"
             className="absolute left-0 right-0 top-[11px] h-[2px] rounded-full bg-oro/15"
           />
-          {/* Relleno de progreso */}
-          <motion.span
+
+          {/* Relleno de progreso (transición CSS, no JS) */}
+          <span
             aria-hidden="true"
-            className="absolute left-0 top-[11px] h-[2px] rounded-full bg-gradient-to-r from-rosa to-oro shadow-[0_0_10px_rgba(245,200,106,.7)]"
-            animate={{ width: `${avance}%` }}
-            transition={{ duration: movimientoReducido ? 0.1 : 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="absolute left-0 top-[11px] h-[2px] rounded-full bg-gradient-to-r from-rosa to-oro
+                       shadow-[0_0_10px_rgba(245,200,106,.7)] transition-[width] duration-300 ease-suave"
+            style={{ width: `${avance}%` }}
           />
 
+          {/* Separadores entre etapas: marcan los capítulos sin escribir nada */}
+          {grupos.slice(1).map((g) => (
+            <span
+              key={`sep-${g.stage}-${g.desde}`}
+              aria-hidden="true"
+              style={{ left: `${(posicionDe(g.desde) + posicionDe(g.desde - 1)) / 2}%` }}
+              className="absolute top-[5px] h-[14px] w-px -translate-x-1/2 bg-oro/35"
+            />
+          ))}
+
           {/* Una marca por foto */}
-          {marcas.map((indice) => {
-            const posicion = fotos.length > 1 ? (indice / (fotos.length - 1)) * 100 : 50;
+          {fotos.map((foto, indice) => {
             const alcanzado = indice <= seleccionado;
             const esActual = indice === seleccionado;
-            const etiquetaEtapa = stageLabels[fotos[indice].stage] ?? fotos[indice].stage;
 
             return (
               <button
-                key={fotos[indice].src}
+                key={foto.src}
                 type="button"
                 onClick={() => irA(indice)}
-                aria-label={`Ir a la foto ${indice + 1} de ${fotos.length}, etapa ${etiquetaEtapa}`}
+                aria-label={`Ir a la foto ${indice + 1} de ${fotos.length}`}
                 aria-current={esActual ? 'true' : undefined}
-                title={etiquetaEtapa}
-                style={{ left: `${posicion}%` }}
+                style={{ left: `${posicionDe(indice)}%` }}
                 /* El botón tiene padding para que el área táctil sea cómoda con
                    el dedo, aunque el puntito visible sea chiquito. */
                 className="group absolute top-0 -translate-x-1/2 px-[9px] py-[6px]"
               >
                 <span
-                  className={`block rounded-full transition-all duration-300 ${
+                  className={`block rounded-full transition-all duration-200 ${
                     esActual
                       ? 'h-3 w-3 bg-oro shadow-glow'
                       : alcanzado
@@ -270,27 +263,36 @@ export default function Timeline() {
       >
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex touch-pan-y">
-            {fotos.map((foto, i) => (
-              <div
-                key={foto.src}
-                className="min-w-0 flex-[0_0_86%] px-2 sm:flex-[0_0_58%] lg:flex-[0_0_44%]"
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${i + 1} de ${fotos.length}`}
-              >
-                <motion.div
-                  animate={{
-                    // La foto activa se ve entera; las de los costados, atenuadas
-                    opacity: i === seleccionado ? 1 : 0.45,
-                    scale: movimientoReducido ? 1 : i === seleccionado ? 1 : 0.93,
-                  }}
-                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                  className="h-full"
+            {fotos.map((foto, i) => {
+              const activa = i === seleccionado;
+              return (
+                <div
+                  key={foto.src}
+                  className="min-w-0 flex-[0_0_86%] px-2 sm:flex-[0_0_58%] lg:flex-[0_0_44%]"
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`${i + 1} de ${fotos.length}`}
                 >
-                  <PhotoCard photo={foto} esPrimera={i === 0} onOpen={() => abrirLightbox(i)} />
-                </motion.div>
-              </div>
-            ))}
+                  {/* Atenuado de las fotos de los costados: transición CSS pura */}
+                  <div
+                    className={`h-full transition-[opacity,transform] duration-300 ease-suave ${
+                      activa
+                        ? 'opacity-100'
+                        : movimientoReducido
+                          ? 'opacity-50'
+                          : 'scale-[0.94] opacity-50'
+                    }`}
+                  >
+                    <PhotoCard
+                      photo={foto}
+                      esPrimera={i === 0}
+                      conFondo={activa}
+                      onOpen={() => abrirLightbox(i)}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 

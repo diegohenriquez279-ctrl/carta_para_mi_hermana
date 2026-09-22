@@ -60,7 +60,7 @@ export default function Lightbox({ photos, indice, onClose, onPrev, onNext }) {
         <motion.div
           role="dialog"
           aria-modal="true"
-          aria-label={`Foto ampliada, etapa ${stageLabels[photo.stage] ?? photo.stage}`}
+          aria-label="Foto ampliada"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -69,11 +69,9 @@ export default function Lightbox({ photos, indice, onClose, onPrev, onNext }) {
           // Click en el fondo cierra; click en el contenido no (stopPropagation abajo)
           onClick={onClose}
         >
-          {/* Barra superior */}
-          <div className="flex items-center justify-between px-4 py-3">
-            <span className="font-cursiva text-3xl text-oro">
-              {stageLabels[photo.stage] ?? photo.stage}
-            </span>
+          {/* Barra superior. La frase de la etapa no va acá: es larga y en
+              cursiva grande no entraría en un celular. Va abajo, chiquita. */}
+          <div className="flex items-center justify-end px-4 py-3">
             <button
               ref={refCerrar}
               type="button"
@@ -95,7 +93,7 @@ export default function Lightbox({ photos, indice, onClose, onPrev, onNext }) {
                 key={photo.src}
                 src={assetUrl(photo.src)}
                 srcSet={buildSrcSet(photo.src)}
-                alt={photo.alt?.trim() || `Foto de la etapa ${stageLabels[photo.stage] ?? photo.stage}`}
+                alt={photo.alt?.trim() || 'Una foto de nuestra historia'}
                 initial={{ opacity: 0, scale: movimientoReducido ? 1 : 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
@@ -134,8 +132,10 @@ export default function Lightbox({ photos, indice, onClose, onPrev, onNext }) {
             <p className="mx-auto max-w-2xl text-lg italic leading-snug text-rosa/85">
               {photo.caption}
             </p>
-            {/* Solo el contador: la etapa ya se muestra arriba */}
-            <p className="mt-3 font-ui text-xs uppercase tracking-[0.25em] text-oro/50">
+            <p className="mt-3 font-cursiva text-xl text-oro/70">
+              {stageLabels[photo.stage] ?? photo.stage}
+            </p>
+            <p className="mt-1 font-ui text-xs uppercase tracking-[0.25em] text-oro/40">
               {indice + 1} / {photos.length}
             </p>
           </div>

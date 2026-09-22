@@ -64,15 +64,11 @@ Las originales, con sus nombres largos, quedaron guardadas en `_originales/`
 
 ### Peso de las fotos
 
-Pesan 3,5 MB en total. Funciona, pero en datos móviles va a tardar. Tres pasan
-el límite recomendado de 300 KB:
+Ya las comprimí: pasaron de 3,5 MB a 2,0 MB (-44%), y de paso les borré los
+metadatos (ubicación GPS, modelo del celular). Los originales quedaron a salvo
+en `_originales-sin-comprimir/`.
 
-- [ ] `peques-02.jpg` — 530 KB
-- [ ] `ahora-02.jpg` — 349 KB
-- [ ] `adolescencia-05.jpg` — 347 KB
-
-Comprimilas en <https://squoosh.app> (MozJPEG, calidad ~80, ancho máx. 1600 px).
-Las demás están bien.
+- [ ] Si agregás fotos nuevas, corré `npm run fotos` antes de publicar.
 
 ---
 

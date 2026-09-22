@@ -120,13 +120,28 @@ export const photos = [
   },
 ];
 
-// Nombres bonitos de cada etapa (los que se ven en pantalla).
+// ---------------------------------------------------------------------------
+// Cómo se llama cada etapa en pantalla.
+//
+// En vez de decir "Niñez" o "Adolescencia" a secas, cada etapa es una frase
+// corta que va contando la historia. Aparece en grande, en cursiva, arriba del
+// carousel, y cambia sola cuando el recorrido pasa de una etapa a la siguiente.
+//
+// Cambialas por las que quieras. Consejo: que sean cortas (4 a 6 palabras),
+// porque van en letra grande y tienen que entrar en la pantalla de un celular.
+// ---------------------------------------------------------------------------
 export const stageLabels = {
-  peques: 'Peques',
-  ninez: 'Niñez',
-  adolescencia: 'Adolescencia',
-  ahora: 'Ahora',
+  peques: 'Cuando éramos chiquitos',
+  ninez: 'Cuando el mundo era el patio',
+  adolescencia: 'Cuando empezaste a ser vos',
+  ahora: 'Y llegamos hasta hoy',
 };
+
+// --- Otras ideas, por si alguna te gusta más ---
+// peques:        'Al principio éramos dos'
+// ninez:         'Los años de no cansarnos nunca'
+// adolescencia:  'Cuando creciste sin avisarme'
+// ahora:         'Hasta el día de hoy'
 
 // Orden en el que se muestran las etapas.
 export const stageOrder = ['peques', 'ninez', 'adolescencia', 'ahora'];

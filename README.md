@@ -92,10 +92,20 @@ Requisitos de cada foto:
 
 Las etapas se agrupan solas a partir del campo `stage`: no hay que tocar nada más.
 
-### Cómo comprimir las fotos
+### Comprimir las fotos
 
-La opción más fácil, sin instalar nada: <https://squoosh.app> (elegí MozJPEG,
-calidad ~80, y bajá el ancho a 1600 px).
+Hay un script que lo hace solo. Después de agregar fotos nuevas, corré:
+
+```bash
+npm run fotos
+```
+
+Achica cada foto a 1400 px de lado más largo, la recomprime, y **le borra los
+metadatos** (ubicación GPS, modelo del celular, fecha). Guarda los originales
+intactos en `_originales-sin-comprimir/` por si querés volver atrás, y si una
+foto ya estaba bien comprimida la deja como está.
+
+Si preferís hacerlo a mano: <https://squoosh.app> (MozJPEG, calidad ~80).
 
 ---
 
