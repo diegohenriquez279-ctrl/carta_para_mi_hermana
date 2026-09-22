@@ -139,30 +139,25 @@ no se rompe.
 
 ---
 
-## Publicar el sitio
+## Publicar el sitio (GitHub Pages)
 
-El repo es **privado**, así que las fotos no quedan expuestas en GitHub.
-El sitio se publica con Netlify (o Vercel), que sí puede construir repos
-privados gratis.
+### La primera vez
 
-Ya dejé la configuración lista: `netlify.toml` y `vercel.json` le dicen a cada
-plataforma cómo compilar el proyecto, así que no hay que configurar nada a mano.
+1. Publicá el sitio desde la terminal:
 
-### Con Netlify (recomendado)
+   ```bash
+   npm run deploy
+   ```
 
-1. Entrá a <https://app.netlify.com> e iniciá sesión con tu cuenta de GitHub.
-2. **Add new site → Import an existing project → GitHub**.
-3. Autorizá a Netlify y elegí el repo `carta_para_mi_hermana`.
-4. El comando de build y la carpeta ya vienen cargados desde `netlify.toml`
-   (`npm run build` y `dist`). Dale a **Deploy**.
-5. En un par de minutos te da un link tipo `algo-random.netlify.app`.
-   Podés cambiarle el nombre en **Site configuration → Change site name**.
+   Eso compila el proyecto y sube la carpeta `dist` a una rama aparte
+   llamada `gh-pages`. Tu código sigue viviendo en `main`, sin mezclarse.
 
-### Con Vercel
+2. En GitHub, andá a **Settings → Pages** y asegurate de que diga:
+   **Source: Deploy from a branch → rama `gh-pages`, carpeta `/ (root)`.**
 
-1. Entrá a <https://vercel.com/new> con tu cuenta de GitHub.
-2. Importá el repo `carta_para_mi_hermana`.
-3. Detecta Vite solo. Dale a **Deploy**.
+3. Esperá un par de minutos. El sitio queda en:
+
+   <https://diegohenriquez279-ctrl.github.io/carta_para_mi_hermana/>
 
 ### Cada vez que cambies algo
 
@@ -174,13 +169,24 @@ git add . && git commit -m "Cambio los textos"
 git push
 ```
 
-Netlify y Vercel reconstruyen el sitio solas con cada push. No hace falta
-`npm run deploy` (ese script es solo por si algún día te pasás a GitHub Pages).
+```bash
+npm run deploy
+```
 
-> **Sobre la privacidad:** el repo es privado, pero **el link del sitio es
-> público** — cualquiera que lo tenga puede abrirlo. No queda indexado en Google
-> ni es adivinable, pero si se lo pasás a alguien, esa persona puede pasárselo a
-> otra. Tenelo en cuenta antes de compartirlo en un grupo grande.
+Los dos primeros comandos guardan tu código; el tercero actualiza el sitio.
+Los tres hacen falta: `git push` solo no republica la página.
+
+### Si la página sale en blanco
+
+Casi siempre es el `base` de `vite.config.js`: tiene que coincidir **exactamente**
+con el nombre del repo (`carta_para_mi_hermana`). Si le cambiás el nombre al repo
+en GitHub, cambialo también ahí.
+
+> **Sobre la privacidad:** el repo es público, así que las fotos se pueden ver y
+> descargar desde GitHub, y con el tiempo Google puede indexarlas. Es el precio
+> de usar GitHub Pages gratis. Si en algún momento preferís que no sea así,
+> se puede pasar el repo a privado y publicar el sitio con Netlify, que sí
+> construye repos privados sin costo.
 
 ---
 
@@ -211,8 +217,7 @@ src/
     usePrefersReducedMotion.js
   lib/
     assets.js              Rutas de /public + helper @1x/@2x
-netlify.toml               Cómo compila Netlify (no hay que tocarlo)
-vercel.json                Cómo compila Vercel (no hay que tocarlo)
+  .nojekyll                Para que GitHub Pages no ignore la carpeta assets
 public/
   media/
     photos/                Las fotos

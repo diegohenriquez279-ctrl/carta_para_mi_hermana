@@ -86,18 +86,16 @@ Si no querés música, dejalo así: no molesta.
 
 ---
 
-## 4. Antes de publicar
+## 4. Publicar
 
-- [ ] Crear el repo **privado** `carta_para_mi_hermana` en GitHub
-- [ ] `git push -u origin main`
-- [ ] Conectar el repo en <https://app.netlify.com> (Add new site → Import an
-      existing project → GitHub). La configuración ya viene en `netlify.toml`.
-- [ ] Abrir el link que te da Netlify en **tu celular** y recorrer todo
+- [ ] `npm run deploy` (compila y sube el sitio a la rama `gh-pages`)
+- [ ] En GitHub: **Settings → Pages → Source: Deploy from a branch → `gh-pages` / `(root)`**
+- [ ] Abrir <https://diegohenriquez279-ctrl.github.io/carta_para_mi_hermana/>
+      en **tu celular** y recorrer todo
 
-> El `base` de `vite.config.js` ya está en `/`, que es lo que corresponde para
-> Netlify y Vercel. Solo hay que cambiarlo si te pasás a GitHub Pages.
-
----
+> Recordá: después de cada cambio hacen falta los tres comandos —
+> `git add . && git commit -m "..."`, `git push` y `npm run deploy`.
+> El `git push` guarda el código pero **no** actualiza la página.
 
 ## 5. Prueba final (hacela en el celular)
 

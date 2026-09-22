@@ -4,21 +4,21 @@ import react from '@vitejs/plugin-react';
 // ---------------------------------------------------------------------------
 // BASE URL — de dónde cuelga el sitio.
 //
-// Ahora mismo está configurado para **Netlify o Vercel**, que sirven el sitio
-// desde la raíz del dominio. Por eso base es '/' y no hay nada que tocar.
+// Está configurado para **GitHub Pages**. Ahí el sitio NO vive en la raíz del
+// dominio sino en  tuusuario.github.io/NOMBRE-REPO/,  así que Vite necesita
+// saber el nombre del repo para armar bien las rutas de las fotos y los estilos.
 //
-// Si algún día te pasás a GitHub Pages, ahí el sitio NO vive en la raíz sino en
-// tuusuario.github.io/NOMBRE-REPO/, y tenés que cambiarlo así:
+// Si le cambiás el nombre al repo en GitHub, cambialo también acá o la página
+// va a salir en blanco.
 //
-//     const NOMBRE_REPO = 'carta_para_mi_hermana';   // el nombre exacto del repo
-//     base: process.env.NODE_ENV === 'production' ? `/${NOMBRE_REPO}/` : '/',
-//
-// Si no coincide con el nombre real del repo, la página sale en blanco.
+// (En `npm run dev` siempre se usa '/', así que en local no se nota la diferencia.
+//  Si algún día te pasás a Netlify o Vercel, poné simplemente  base: '/' ).
 // ---------------------------------------------------------------------------
+const NOMBRE_REPO = 'carta_para_mi_hermana';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: process.env.NODE_ENV === 'production' ? `/${NOMBRE_REPO}/` : '/',
 
   build: {
     rollupOptions: {
